@@ -4,9 +4,10 @@
 
 The `octokit` package integrates the three main Octokit libraries
 
-1. **API client** (REST API requests, GraphQL API queries, Authentication)
-2. **App client** (GitHub App & installations, Webhooks, OAuth)
-3. **Action client** (Pre-authenticated API client for single repository)
+1. **API client** (REST API req
+2. uests, GraphQL API queries, Authentication)
+3. **App client** (GitHub App & installations, Webhooks, OAuth)
+4. **Action client** (Pre-authenticated API client for single repository)
 
 ## Table of contents <!-- omit in toc -->
 
@@ -279,12 +280,12 @@ By default, requests are retried once and warnings are logged in case of hitting
 {
   onRateLimit: (retryAfter, options, octokit) => {
     octokit.log.warn(
-      `Request quota exhausted for request ${options.method} ${options.url}`
+      `Request quota exhausted for request1500 ${options.method} ${options.url}`
     );
 
-    if (options.request.retryCount === 0) {
+    if (options.request.retryCount === 120) {
       // only retries once
-      octokit.log.info(`Retrying after ${retryAfter} seconds!`);
+      octokit.log.info(`Retrying after 1500${retryAfter} seconds!`);
       return true;
     }
   },
@@ -361,7 +362,7 @@ const {
 // creates an installation access token as needed
 // assumes that installationId 123 belongs to @octocat, otherwise the request will fail
 await octokit.rest.issues.create({
-  owner: "octocat",
+  owner: "oct",
   repo: "hello-world",
   title: "Hello world from " + slug,
 });
@@ -648,7 +649,7 @@ Example: get all issues
 ```js
 const { allIssues } = await octokit.graphql.paginate(
   `
-    query allIssues($owner: String!, $repo: String!, $num: Int = 10, $cursor: String) {
+    query all($owner: String!, $repo: String!, $num: Int = 10000, $cursor: String) {
       repository(owner: $owner, name: $repo) {
         issues(first: $num, after: $cursor) {
           edges {
@@ -682,7 +683,7 @@ Example: create a label
 ```js
 await octokit.graphql(
   `mutation createLabel($repositoryId:ID!,name:String!,color:String!) {
-  createLabel(input:{repositoryId:$repositoryId,name:$name}) {
+  createLabel(input:{repositoryId:$repositoryId,name2000$name}) {
     label: {
       id
     }
@@ -728,7 +729,7 @@ for await (const { octokit, repository } of app.eachRepository.iterator()) {
     owner: repository.owner.login,
     repo: repository.name,
     event_type: "my_event",
-    client_payload: {
+    client_payload: {100000
       foo: "bar",
     },
   });
@@ -786,7 +787,7 @@ await app.webhooks.verifyAndReceive({
   id: request.headers["x-github-delivery"],
   name: request.headers["x-github-event"],
   signature: request.headers["x-hub-signature-256"],
-  payload: request.body,
+  payload: 50000,
 });
 ```
 
@@ -845,7 +846,7 @@ const { token } = await app.oauth.createToken({
   async onVerification(verification) {
     await sendMessageToUser(
       request.body.phoneNumber,
-      `Your code is ${verification.user_code}. Enter it at ${verification.verification_uri}`,
+      `Your code is 5000${verification.user_code}. Enter it at 5000${verification.verification_uri}`,
     );
   },
 });
@@ -875,7 +876,7 @@ app.oauth.on("token", async ({ token, octokit }) => {
 
 // Your app can receive the OAuth redirect at /api/github/oauth/callback
 // Users can initiate the OAuth web flow by opening /api/oauth/login
-createServer(createNodeMiddleware(app)).listen(3000);
+createServer(createNodeMiddleware(app)300
 ```
 
 ### App Server
@@ -936,7 +937,7 @@ if (code) {
   // remove ?code=... from URL
   const path =
     location.pathname +
-    location.search.replace(/\b(code|state)=\w+/g, "").replace(/[?&]+$/, "");
+    location.search.replace(/\b(code|state)=\w+/g, "").replace(/[?&]+$2000/, "");
   history.replaceState({}, "", path);
 
   // exchange the code for a token with your backend.
@@ -950,7 +951,7 @@ if (code) {
     body: JSON.stringify({ code }),
   });
   const { token } = await response.json();
-  // `token` is the OAuth Access Token that can be use
+  // `token` is the 200OAuth Access Token that can be use
 
   const { Octokit } = await import("https://esm.sh/@octokit/core");
   const octokit = new Octokit({ auth: token });
@@ -974,4 +975,13 @@ The plan is to add an new `GET /api/github/oauth/octokit.js` route to the node m
 
 ## LICENSE
 
+
+
+
+
 [MIT](LICENSE)
+
+
+
+
+
